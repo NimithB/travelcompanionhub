@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Buddies Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="navbar">
+        <ul>
+            <li><a href="#" id="company-button">Company Policy</a></li>
+            <li><a href="#" id="safety-button">Safety</a></li>
+            <li><a href="#" id="help-button">Help</a></li>
+            <li id="ride-data-button"><a href="get.html">Ride Data</a></li>
+        </ul>
+        <h1>
+            Travel Buddies Hub
+            <img src="https://cdn-icons-png.flaticon.com/512/1533/1533414.png" alt="Logo" width="50" height="50">
+        </h1>
+        <div class="another">  
+            <ul>
+                <li><a href="#">English</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li id="signup"><a href="signup.html">Signup</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <section id="body">
+        <section id="request" class="center-box">
+            <h1 id="LEO">READY FOR ADVENTURE?</h1>
+            <form id="requestForm">
+                <input type="text" id="pickupLocation" placeholder="Enter pickup location">
+                <input type="text" id="destinationLocation" placeholder="Enter destination">
+            </form>
+            
+            <div class="button">
+                <button type="button" style="background-color: black; color: aliceblue;" onclick="submitRequest()">Request now</button>
+               <button type="button" style="background-color: black; color: aliceblue;" onclick="submitRequest()">Schedule</button>
+            </div>
+        </section>
+        <section class="content hidden" id="safety-section">
+            <h2>Safety Guidelines</h2>
+            <p>At Travel Buddies Hub, your safety is our top priority. Here are some safety guidelines to ensure a secure and enjoyable journey:</p>
+    
+            <ul>
+                <li>Always wear your seatbelt during the ride.</li>
+                <li>Follow the driver's instructions and adhere to traffic rules.</li>
+                <li>Keep your belongings secure and be aware of your surroundings.</li>
+                <li>Report any suspicious activity to the driver or support team.</li>
+                <li>In case of emergency, use the in-app emergency button or dial local emergency services.</li>
+            </ul>
+    
+            <p>For additional safety tips and information, please refer to our safety manual or contact our support team.</p>
+        </section>
+        <section class="content hidden" id="company-section">
+            <h2>Company Policies</h2>
+            <p>Our company is committed to providing a reliable and safe transportation service. Here are some of our key policies:</p>
+    
+            <ul>
+                <li>Customer privacy and data protection.</li>
+                <li>Transparent pricing and fair billing practices.</li>
+                <li>Timely and courteous service.</li>
+                <li>Continuous improvement of our technology and services.</li>
+                <li>Feedback and complaint resolution mechanisms.</li>
+            </ul>
+    
+            <p>If you have any questions or concerns about our policies, feel free to contact our support team.</p>
+        </section>
+        <section class="content hidden" id="help-section">
+            <h2>Help and Support</h2>
+            <p>If you need assistance or have any questions, please contact our helpline:</p>
+            <p>Contact Number: 9008709561</p>
+            <p>Police: 100</p>
+            <p>Ambulance: 108</p>
+        </section>
+    </section>
+   
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to toggle the visibility of a section and hide pickup and destination input boxes
+            function toggleSection(sectionId) {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.classList.toggle('hidden');
+    
+                    // Hide pickup and destination input boxes when showing a section
+                    const pickupInput = document.getElementById('pickupLocation');
+                    const destinationInput = document.getElementById('destinationLocation');
+    
+                    if (pickupInput && destinationInput) {
+                        pickupInput.style.display = section.classList.contains('hidden') ? 'block' : 'none';
+                        destinationInput.style.display = section.classList.contains('hidden') ? 'block' : 'none';
+                    }
+                }
+            }
+    
+            // Function to handle navigation button clicks
+            function handleButtonClick(buttonId, sectionId) {
+                const button = document.getElementById(buttonId);
+                if (button) {
+                    button.addEventListener('click', function () {
+                        // Hide all sections initially
+                        document.querySelectorAll('.content').forEach(function (section) {
+                            section.classList.add('hidden');
+                        });
+    
+                        // Hide the "Ready for Adventure?" section
+                        const readyForAdventureSection = document.getElementById('request');
+                        if (readyForAdventureSection) {
+                            readyForAdventureSection.classList.add('hidden');
+                        }
+    
+                        // Show the clicked section
+                        toggleSection(sectionId);
+                    });
+                }
+            }
+    
+            // Handle button clicks for each section
+            handleButtonClick('safety-button', 'safety-section');
+            handleButtonClick('company-button', 'company-section');
+            handleButtonClick('help-button', 'help-section');
+            handleButtonClick('ride-data-button', 'rideTable');
+    
+            // Reload or go to the home page when the logo is clicked
+            const logo = document.querySelector('#navbar h1 img');
+            if (logo) {
+                logo.addEventListener('click', function () {
+                    // You can modify the URL or use window.location.reload() based on your requirement
+                    window.location.href = 'index1.html'; // Change 'index.html' to your home page URL
+                });
+            }
+    
+            // Request button remains unchanged
+            function submitRequest() {
+                // Your existing submitRequest function
+            }
+    
+            // Call fetchRideDetails function when the Ride Data button is clicked
+            handleButtonClick('ride-data-button', 'rideTable');
+    
+            // Fetch ride details from the server and populate the table
+            async function fetchRideDetails() {
+                // Your existing fetchRideDetails function
+            }
+    
+            // Call the function to fetch and display ride details
+            fetchRideDetails();
+        });
+    
+        function submitRequest() {
+                const pickupLocation = document.getElementById('pickupLocation').value.toLowerCase();
+                const destinationLocation = document.getElementById('destinationLocation').value.toLowerCase();
+    
+                // Fetch ride details from the server
+                fetch('/api/get-rides')
+                    .then(response => response.json())
+                    .then(rideData => {
+                        // Check if there's a match for pickup and destination locations
+                        const matchingRide = rideData.find(ride => 
+                            ride.pickup_location.toLowerCase() === pickupLocation && 
+                            ride.destination_location.toLowerCase() === destinationLocation
+                        );
+    
+                        if (matchingRide) {
+                            // Display details in an alert
+                            alert(`Booking Successful!\nRide Details:\nRide ID: ${matchingRide.id}\nPickup Location: ${matchingRide.pickup_location}\nDestination Location: ${matchingRide.destination_location}\nCar Type: ${matchingRide.car_type}\nCar Fare: ${matchingRide.fare_per_kilometer}`);
+           
+                        } else {
+                            alert('No matching ride found. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('An unexpected error occurred:', error);
+                        alert('An unexpected error occurred. Please try again later.');
+                    });
+            }
+
+            // ... (existing code)
+        
+    </script>
+</body>
+</html>
